@@ -31,12 +31,12 @@ namespace WindowsFormsApp1
                 sw.WriteLine(date.TimeOfDay.ToString() +" "+ task);
             }
         }
-        public static bool IsTodayTaskFileExist(DateTime date)
+        public static bool IsTaskFileExist(DateTime date)
         {
             string path = GetTaskFilePath(date);
             return File.Exists(path);
         }
-        public static List<SingleTask> GetTodayTaskFile(DateTime date)
+        public static List<SingleTask> GetTask(DateTime date)
         {
             string path = GetTaskFilePath(date);
             List<SingleTask> AllTask = new List<SingleTask>();

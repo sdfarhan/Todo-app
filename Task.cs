@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WindowsFormsApp1
 {
-    class Task
+    class Task : IDisposable
     {
         public DateTime Date;
         public List<SingleTask> Tasks;
@@ -11,9 +11,9 @@ namespace WindowsFormsApp1
         {
             Date = date;
             Tasks = new List<SingleTask>();
-            if (ENV.IsTodayTaskFileExist(date))
+            if (ENV.IsTaskFileExist(date))
             {
-                Tasks = ENV.GetTodayTaskFile(date);
+                Tasks = ENV.GetTask(date);
             }
             else
             {
@@ -21,10 +21,19 @@ namespace WindowsFormsApp1
                     ENV.CreateTodaysTaskFile(Date);
             }
         }
-        public void AddTask(DateTime Date,string task)
+        public void AddTask(string task)
         {
             ENV.AddToTodayTaskFile(Date,task);
             this.Tasks.Add(new SingleTask(DateTime.Now.TimeOfDay, task));
+        }
+        public void GetTaskFromFile()
+        {
+            Tasks = ENV.GetTask(Date);
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
         }
     }
 }

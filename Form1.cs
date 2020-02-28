@@ -1,72 +1,69 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        private Todo todo;
+        private DateTime FormDate;
         public Form1()
         {
             InitializeComponent();
-            todo = new Todo();
+            FormDate = DateTime.Now;
         }
         private void TodaysScheduleButton_Click(object sender, EventArgs e)
         {
-            displayTaskInTextArea(todo.TodayTasks);
+            using (Task task = new Task(DateTime.Now))
+            {
+                displayTaskInTextArea(task.Date);
+            }
         }
         private void YesterdaysScheduleButton_Click(object sender, EventArgs e)
         {
-            displayTaskInTextArea(todo.YesterdayTasks);
+            using (Task task = new Task(DateTime.Now.AddDays(-1)))
+            {
+                displayTaskInTextArea(task.Date);
+            }
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            displayTaskInTextArea(todo.TodayTasks);
+            displayTaskInTextArea(DateTime.Now);
         }
         private void AddTaskButton_Click(object sender, EventArgs e)
         {
             Form2 popup = new Form2();
             popup.ShowDialog();
-            todo.TodayTasks.AddTask(todo.TodayTasks.Date,popup.EnteredTask);
-            displayTaskInTextArea(todo.TodayTasks);
+            using (Task task = new Task(FormDate))
+            {
+                task.AddTask(popup.EnteredTask);
+            }
+            displayTaskInTextArea(FormDate);
         }
-        private void displayTaskInTextArea(Task task)
+        private void displayTaskInTextArea(DateTime date)
         {
-            DateLabel.Text = task.Date.ToShortDateString();
-            DayLabel.Text  =  task.Date.DayOfWeek.ToString();
+            DateLabel.Text = date.ToShortDateString();
+            DayLabel.Text = date.DayOfWeek.ToString();
             TaskListArea.Clear();
-            if (task.Tasks.Count() == 0)
+            using (Task task = new Task(date))
             {
-                TaskListArea.AppendText("Hurray You don't have any task!!");
-            }
-            int i = 0;
-            foreach(SingleTask eachtask in task.Tasks)
-            {
-                TaskListArea.AppendText(++i + eachtask.Time.ToString().Substring(0,8).PadLeft(9+15) + eachtask.Task.PadLeft(eachtask.Task.Length+25) + "\n");
+                if (task.Tasks.Count() == 0)
+                {
+                    TaskListArea.AppendText("Hurray You don't have any task!!");
+                }
+                int i = 0;
+                foreach(SingleTask eachtask in task.Tasks)
+                {
+                    TaskListArea.AppendText(++i + eachtask.Time.ToString().Substring(0,8).PadLeft(9+15) + eachtask.Task.PadLeft(eachtask.Task.Length+25) + "\n");
+                }
+
             }
         }
-        private void ChangeDayButton_Click(object sender, EventArgs e)
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
-            todo.ChangeDay();
-            displayTaskInTextArea(todo.TodayTasks);
-        }
-        private void DeleteTaskButton_Click(object sender, EventArgs e)
-        {
-            DeleteForm DeleteTask = new DeleteForm();
-            DeleteTask.ShowDialog();
-            if(DeleteTask.IndexofTask>0 && DeleteTask.IndexofTask <= todo.TodayTasks.Tasks.Count)
-            {
-                todo.TodayTasks.Tasks.RemoveAt(DeleteTask.IndexofTask - 1);
-            }
-            ENV.UpdateTodayTaskFile(todo.TodayTasks);
-            displayTaskInTextArea(todo.TodayTasks);
+            FormDate = dateTimePicker1.Value;
+            if(ENV.IsTaskFileExist(FormDate))
+                displayTaskInTextArea(FormDate);
         }
     }
 }
