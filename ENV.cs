@@ -50,7 +50,7 @@ namespace WindowsFormsApp1
                     char[] seperator = { ' ' };
                     string[] tokenize = CurrTask.Split(seperator,2,StringSplitOptions.RemoveEmptyEntries);
                     if(tokenize.Length == 2)
-                        AllTask.Add(new SingleTask(TimeSpan.Parse(tokenize[0]), tokenize[1]));
+                        AllTask.Add(new SingleTask(TimeSpan.Parse(tokenize[0]), tokenize[1], TimeSpan.Parse(tokenize[1].Substring(tokenize[1].Length-8))));
                 }
             }
             return AllTask;

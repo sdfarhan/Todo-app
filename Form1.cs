@@ -47,34 +47,41 @@ namespace WindowsFormsApp1
                 AddTaskEventHandler.ShowDialog();
                 using (Task task = new Task(FormDate))
                 {
-                    task.AddTask(AddTaskEventHandler.EnteredTask,AddTaskEventHandler.SelectedTime);
+                    if(!task.AddTask(AddTaskEventHandler.EnteredTask,AddTaskEventHandler.SelectedTime))
+                        MessageBox.Show("You already have a schedule at " + AddTaskEventHandler.SelectedTime);
                 }
                 displayTaskInTextArea(FormDate);
             }
         }
         private void displayTaskInTextArea(DateTime date)
         {
-            DateLabel.Text = date.ToShortDateString();
-            DayLabel.Text = date.DayOfWeek.ToString();
             TaskListArea.Clear();
-            using (Task task = new Task(date))
+            if (ENV.IsTaskFileExist(date))
             {
-                if (task.Tasks.Count() == 0)
+                DateLabel.Text = date.ToShortDateString();
+                DayLabel.Text = date.DayOfWeek.ToString();
+                using (Task task = new Task(date))
                 {
-                    TaskListArea.AppendText("Hurray, You don't have any task!!");
+                    if (task.Tasks.Count() == 0)
+                    {
+                        TaskListArea.AppendText("Hurray, You don't have any task!!");
+                    }
+                    int i = 0;
+                    foreach (SingleTask eachtask in task.Tasks)
+                    {
+                        TaskListArea.AppendText(++i + eachtask.TimeCreated.ToString().Substring(0, 8).PadLeft(9 + 15) + eachtask.Task.PadLeft(eachtask.Task.Length + 25) + "\n");
+                    }
                 }
-                int i = 0;
-                foreach(SingleTask eachtask in task.Tasks)
-                {
-                    TaskListArea.AppendText(++i + eachtask.TimeCreated.ToString().Substring(0,8).PadLeft(9+15) + eachtask.Task.PadLeft(eachtask.Task.Length+25) + "\n");
-                }
+            }
+            else
+            {
+                TaskListArea.AppendText("Hurray, You don't have any task!!");
             }
         }
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
             FormDate = dateTimePicker1.Value;
-            if(ENV.IsTaskFileExist(FormDate))
-                displayTaskInTextArea(FormDate);
+            displayTaskInTextArea(FormDate);
         }
 
         private void DeleteTaskButton_Click(object sender, EventArgs e)

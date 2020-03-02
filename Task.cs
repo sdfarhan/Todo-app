@@ -21,12 +21,28 @@ namespace WindowsFormsApp1
                     ENV.CreateTodaysTaskFile(Date);
             }
         }
-        public void AddTask(string task,TimeSpan ScheduledTime)
+        public bool AddTask(string task,TimeSpan ScheduledTime)
         {
+            if (IsConflictingTime(ScheduledTime))
+            {
+                return false;
+            }
             SingleTask CurrentSingleTask = new SingleTask(DateTime.Now.TimeOfDay, task, ScheduledTime);
             ENV.AddToTodayTaskFile(Date,CurrentSingleTask);
             this.Tasks.Add(CurrentSingleTask);
+            return true;
         }
+
+        private bool IsConflictingTime(TimeSpan ScheduledTime)
+        {
+            foreach(SingleTask EachTask in Tasks)
+            {
+                if (EachTask.ScheduledTime == ScheduledTime)
+                    return true;
+            }
+            return false;
+        }
+
         public void GetTaskFromFile()
         {
             Tasks = ENV.GetTask(Date);
