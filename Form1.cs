@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -36,17 +37,17 @@ namespace WindowsFormsApp1
         }
         private void AddTaskButton_Click(object sender, EventArgs e)
         {
-            if (FormDate.Date < DateTime.Now)
+            if (FormDate.Date < DateTime.Now.Date)
             {
                 MessageBox.Show("Cannot add task to this date!!");
             }
             else
             {
-                Form2 popup = new Form2();
-                popup.ShowDialog();
+                Form2 AddTaskEventHandler = new Form2();
+                AddTaskEventHandler.ShowDialog();
                 using (Task task = new Task(FormDate))
                 {
-                    task.AddTask(popup.EnteredTask);
+                    task.AddTask(AddTaskEventHandler.EnteredTask,AddTaskEventHandler.SelectedTime);
                 }
                 displayTaskInTextArea(FormDate);
             }
@@ -65,7 +66,7 @@ namespace WindowsFormsApp1
                 int i = 0;
                 foreach(SingleTask eachtask in task.Tasks)
                 {
-                    TaskListArea.AppendText(++i + eachtask.Time.ToString().Substring(0,8).PadLeft(9+15) + eachtask.Task.PadLeft(eachtask.Task.Length+25) + "\n");
+                    TaskListArea.AppendText(++i + eachtask.TimeCreated.ToString().Substring(0,8).PadLeft(9+15) + eachtask.Task.PadLeft(eachtask.Task.Length+25) + "\n");
                 }
             }
         }

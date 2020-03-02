@@ -1,20 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WindowsFormsApp1
 {
     class SingleTask
     {
-        public TimeSpan Time;
+        public TimeSpan TimeCreated;
         public String Task;
-
-        public SingleTask(TimeSpan time, string task)
+        public TimeSpan ScheduledTime;
+        public SingleTask(TimeSpan time_created, string task)
         {
-            this.Time = time;
+            this.TimeCreated = time_created;
             this.Task = task;
+        }
+        public SingleTask(TimeSpan time_created, string task, TimeSpan time)
+        {
+            this.TimeCreated = time_created;
+            this.Task = task;
+            this.ScheduledTime = time; 
         }
     }
 }

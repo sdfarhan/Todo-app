@@ -21,22 +21,21 @@ namespace WindowsFormsApp1
                     ENV.CreateTodaysTaskFile(Date);
             }
         }
-        public void AddTask(string task)
+        public void AddTask(string task,TimeSpan ScheduledTime)
         {
-            ENV.AddToTodayTaskFile(Date,task);
-            this.Tasks.Add(new SingleTask(DateTime.Now.TimeOfDay, task));
+            SingleTask CurrentSingleTask = new SingleTask(DateTime.Now.TimeOfDay, task, ScheduledTime);
+            ENV.AddToTodayTaskFile(Date,CurrentSingleTask);
+            this.Tasks.Add(CurrentSingleTask);
         }
         public void GetTaskFromFile()
         {
             Tasks = ENV.GetTask(Date);
         }
-
         public void deleteTask(int index)
         {
             Tasks.RemoveAt(index-1);
             ENV.UpdateTodayTaskFile(this);
         }
-
         public void Dispose()
         {
             GC.SuppressFinalize(this);

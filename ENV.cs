@@ -23,12 +23,12 @@ namespace WindowsFormsApp1
                 sw.WriteLine("TIME" + "TASK".PadLeft(20));
             }
         }
-        public static void AddToTodayTaskFile(DateTime date,string task)
+        public static void AddToTodayTaskFile(DateTime date,SingleTask CurrentSingleTask)
         {
             string path = GetTaskFilePath(date);
             using (StreamWriter sw = new StreamWriter(path,true))
             {
-                sw.WriteLine(date.TimeOfDay.ToString() +" "+ task);
+                sw.WriteLine(CurrentSingleTask.TimeCreated +" "+ CurrentSingleTask.Task+" AT "+CurrentSingleTask.ScheduledTime);
             }
         }
         public static bool IsTaskFileExist(DateTime date)
@@ -65,7 +65,7 @@ namespace WindowsFormsApp1
                 sw.WriteLine("TIME" + "TASK".PadLeft(20));
                 foreach(SingleTask EachTask in todaytask.Tasks)
                 {
-                    sw.WriteLine(EachTask.Time.ToString() + EachTask.Task.PadLeft(15));
+                    sw.WriteLine(EachTask.TimeCreated.ToString() + EachTask.Task.PadLeft(15));
                 }
             }
         }
