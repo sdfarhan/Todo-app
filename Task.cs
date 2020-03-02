@@ -31,6 +31,12 @@ namespace WindowsFormsApp1
             Tasks = ENV.GetTask(Date);
         }
 
+        public void deleteTask(int index)
+        {
+            Tasks.RemoveAt(index-1);
+            ENV.UpdateTodayTaskFile(this);
+        }
+
         public void Dispose()
         {
             GC.SuppressFinalize(this);

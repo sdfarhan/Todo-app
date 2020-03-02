@@ -38,6 +38,7 @@
             this.TimeLabel = new System.Windows.Forms.Label();
             this.TaskLabel = new System.Windows.Forms.Label();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.DeleteTaskButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // DateLabel
@@ -92,6 +93,7 @@
             // 
             this.TaskListArea.Location = new System.Drawing.Point(94, 115);
             this.TaskListArea.Name = "TaskListArea";
+            this.TaskListArea.ReadOnly = true;
             this.TaskListArea.Size = new System.Drawing.Size(650, 393);
             this.TaskListArea.TabIndex = 7;
             this.TaskListArea.Text = "";
@@ -131,11 +133,22 @@
             this.dateTimePicker1.TabIndex = 13;
             this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
+            // DeleteTaskButton
+            // 
+            this.DeleteTaskButton.Location = new System.Drawing.Point(773, 335);
+            this.DeleteTaskButton.Name = "DeleteTaskButton";
+            this.DeleteTaskButton.Size = new System.Drawing.Size(197, 42);
+            this.DeleteTaskButton.TabIndex = 14;
+            this.DeleteTaskButton.Text = "DELETE TASK";
+            this.DeleteTaskButton.UseVisualStyleBackColor = true;
+            this.DeleteTaskButton.Click += new System.EventHandler(this.DeleteTaskButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1010, 608);
+            this.Controls.Add(this.DeleteTaskButton);
             this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.TaskLabel);
             this.Controls.Add(this.TimeLabel);
@@ -166,6 +179,7 @@
         private System.Windows.Forms.Label TimeLabel;
         private System.Windows.Forms.Label TaskLabel;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.Button DeleteTaskButton;
     }
 }
 

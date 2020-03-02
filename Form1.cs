@@ -16,6 +16,8 @@ namespace WindowsFormsApp1
         {
             using (Task task = new Task(DateTime.Now))
             {
+                dateTimePicker1.Value = task.Date;
+                FormDate = dateTimePicker1.Value;
                 displayTaskInTextArea(task.Date);
             }
         }
@@ -23,6 +25,8 @@ namespace WindowsFormsApp1
         {
             using (Task task = new Task(DateTime.Now.AddDays(-1)))
             {
+                dateTimePicker1.Value = task.Date;
+                FormDate = dateTimePicker1.Value;
                 displayTaskInTextArea(task.Date);
             }
         }
@@ -32,13 +36,20 @@ namespace WindowsFormsApp1
         }
         private void AddTaskButton_Click(object sender, EventArgs e)
         {
-            Form2 popup = new Form2();
-            popup.ShowDialog();
-            using (Task task = new Task(FormDate))
+            if (FormDate.Date < DateTime.Now)
             {
-                task.AddTask(popup.EnteredTask);
+                MessageBox.Show("Cannot add task to this date!!");
             }
-            displayTaskInTextArea(FormDate);
+            else
+            {
+                Form2 popup = new Form2();
+                popup.ShowDialog();
+                using (Task task = new Task(FormDate))
+                {
+                    task.AddTask(popup.EnteredTask);
+                }
+                displayTaskInTextArea(FormDate);
+            }
         }
         private void displayTaskInTextArea(DateTime date)
         {
@@ -49,14 +60,13 @@ namespace WindowsFormsApp1
             {
                 if (task.Tasks.Count() == 0)
                 {
-                    TaskListArea.AppendText("Hurray You don't have any task!!");
+                    TaskListArea.AppendText("Hurray, You don't have any task!!");
                 }
                 int i = 0;
                 foreach(SingleTask eachtask in task.Tasks)
                 {
                     TaskListArea.AppendText(++i + eachtask.Time.ToString().Substring(0,8).PadLeft(9+15) + eachtask.Task.PadLeft(eachtask.Task.Length+25) + "\n");
                 }
-
             }
         }
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
@@ -65,5 +75,39 @@ namespace WindowsFormsApp1
             if(ENV.IsTaskFileExist(FormDate))
                 displayTaskInTextArea(FormDate);
         }
+
+        private void DeleteTaskButton_Click(object sender, EventArgs e)
+        {
+            if (ENV.IsTaskFileExist(FormDate))
+            {
+                using (Task task = new Task(FormDate))
+                {
+                    if(task.Tasks.Count > 0)
+                    {
+                        DeleteForm DeleteTaskEvent = new DeleteForm();
+                        DeleteTaskEvent.ShowDialog();
+                        int index = DeleteTaskEvent.IndexofTask;
+                        if(index > 0 && index <= task.Tasks.Count)
+                        {
+                            task.deleteTask(index);
+                            displayTaskInTextArea(FormDate);
+                        }
+                        else
+                        {
+                            MessageBox.Show("invalid index!! try again");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("No Taks To delete!!");
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("No Taks To delete!!");
+            }
+        }
+        
     }
 }
