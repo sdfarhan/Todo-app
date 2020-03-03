@@ -43,12 +43,14 @@ namespace WindowsFormsApp1
             }
             else
             {
-                Form2 AddTaskEventHandler = new Form2();
+                Form2 AddTaskEventHandler = new Form2(FormDate);
                 AddTaskEventHandler.ShowDialog();
+                if (AddTaskEventHandler.EnteredTask == null)
+                    return;
                 using (Task task = new Task(FormDate))
                 {
                     if(!task.AddTask(AddTaskEventHandler.EnteredTask,AddTaskEventHandler.SelectedTime))
-                        MessageBox.Show("You already have a schedule at " + AddTaskEventHandler.SelectedTime);
+                        MessageBox.Show("You already have a task at " + AddTaskEventHandler.SelectedTime);
                 }
                 displayTaskInTextArea(FormDate);
             }
@@ -56,10 +58,10 @@ namespace WindowsFormsApp1
         private void displayTaskInTextArea(DateTime date)
         {
             TaskListArea.Clear();
+            DateLabel.Text = date.ToShortDateString();
+            DayLabel.Text = date.DayOfWeek.ToString();
             if (ENV.IsTaskFileExist(date))
             {
-                DateLabel.Text = date.ToShortDateString();
-                DayLabel.Text = date.DayOfWeek.ToString();
                 using (Task task = new Task(date))
                 {
                     if (task.Tasks.Count() == 0)

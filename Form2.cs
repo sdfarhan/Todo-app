@@ -9,11 +9,15 @@ namespace WindowsFormsApp1
     {
         public string EnteredTask;
         public TimeSpan SelectedTime;
-        public Form2()
+        public Form2(DateTime date)
         {
             InitializeComponent();
             FillHoursComboBox();
             FillMinutesComboBox();
+            if(date.Date == DateTime.Now.Date)
+            {
+                DisableSomeHourOptions();
+            }
         }
         private void AddTaskButton_Click(object sender, EventArgs e)
         {

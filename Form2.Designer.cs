@@ -1,4 +1,6 @@
-﻿namespace WindowsFormsApp1
+﻿using System;
+
+namespace WindowsFormsApp1
 {
     partial class Form2
     {
@@ -42,6 +44,19 @@
                 this.MinutesComboBox.Items.Add(i);
             }
             this.MinutesComboBox.Text = "00";
+        }
+        protected void DisableSomeHourOptions()
+        {
+            int CurrentHour = DateTime.Now.Hour;
+            for (int i = 0; i < 10 && i < CurrentHour; i++)
+            {
+                this.HoursComboBox.Items.Remove("0" + i);
+            }
+            for(int i = 10; i<24 && i < CurrentHour; i++)
+            {
+                this.HoursComboBox.Items.Remove(i);
+            }
+            this.HoursComboBox.Text = CurrentHour.ToString();
         }
         #region Windows Form Designer generated code
 
@@ -109,6 +124,7 @@
             // 
             // MinutesComboBox
             // 
+            this.MinutesComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.MinutesComboBox.FormattingEnabled = true;
             this.MinutesComboBox.Location = new System.Drawing.Point(228, 213);
             this.MinutesComboBox.Name = "MinutesComboBox";
@@ -117,6 +133,7 @@
             // 
             // HoursComboBox
             // 
+            this.HoursComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.HoursComboBox.FormattingEnabled = true;
             this.HoursComboBox.Location = new System.Drawing.Point(82, 213);
             this.HoursComboBox.Name = "HoursComboBox";
@@ -154,7 +171,6 @@
         }
 
         #endregion
-
         private System.Windows.Forms.TextBox TaskInputBox;
         private System.Windows.Forms.Button AddTaskButton;
         private System.Windows.Forms.Label label1;

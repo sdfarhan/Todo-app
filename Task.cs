@@ -32,7 +32,6 @@ namespace WindowsFormsApp1
             this.Tasks.Add(CurrentSingleTask);
             return true;
         }
-
         private bool IsConflictingTime(TimeSpan ScheduledTime)
         {
             foreach(SingleTask EachTask in Tasks)
@@ -41,11 +40,6 @@ namespace WindowsFormsApp1
                     return true;
             }
             return false;
-        }
-
-        public void GetTaskFromFile()
-        {
-            Tasks = ENV.GetTask(Date);
         }
         public void deleteTask(int index)
         {

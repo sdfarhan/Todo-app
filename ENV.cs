@@ -19,6 +19,7 @@ namespace WindowsFormsApp1
             string path = GetTaskFilePath(date);
             using (StreamWriter sw = new StreamWriter(path))
             {
+                File.SetAttributes(path, File.GetAttributes(path) & FileAttributes.ReadOnly);
                 sw.WriteLine(date.ToShortDateString() + "  " + date.DayOfWeek);
                 sw.WriteLine("TIME" + "TASK".PadLeft(20));
             }
