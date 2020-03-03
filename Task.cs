@@ -5,45 +5,51 @@ namespace WindowsFormsApp1
 {
     class Task : IDisposable
     {
-        public DateTime Date;
-        public List<SingleTask> Tasks;
-        public Task(DateTime date)
+        private DateTime taskDateTime;
+        private List<SingleTask> tasks;
+
+        internal List<SingleTask> Tasks { get => tasks; set => tasks = value; }
+        public DateTime TaskDateTime { get => taskDateTime; set => taskDateTime = value; }
+
+        public Task(DateTime Date)
         {
-            Date = date;
+            TaskDateTime = Date;
             Tasks = new List<SingleTask>();
-            if (ENV.IsTaskFileExist(date))
+            if (ENV.IsTaskFileExist(Date))
             {
-                Tasks = ENV.GetTask(date);
+                Tasks = ENV.GetTask(Date);
             }
             else
             {
-                if(Date.Date >= DateTime.Now.Date)
-                    ENV.CreateTodaysTaskFile(Date);
+                if(TaskDateTime.Date >= DateTime.Now.Date)
+                    ENV.CreateTodaysTaskFile(TaskDateTime);
             }
         }
-        public bool AddTask(string task,TimeSpan ScheduledTime)
+        public void AddTask(string Task,TimeSpan ScheduledTime)
         {
             if (IsConflictingTime(ScheduledTime))
             {
-                return false;
+                throw new ConflictingScheduledTimeException();
             }
-            SingleTask CurrentSingleTask = new SingleTask(DateTime.Now.TimeOfDay, task, ScheduledTime);
-            ENV.AddToTodayTaskFile(Date,CurrentSingleTask);
-            this.Tasks.Add(CurrentSingleTask);
-            return true;
+            if(Task == null)
+            {
+                throw new AddTaskWindowClosedException();
+            }
+            SingleTask CurrentSingleTask = new SingleTask(DateTime.Now.TimeOfDay, Task, ScheduledTime); //creating a new task
+            ENV.AddToTodayTaskFile(TaskDateTime,CurrentSingleTask); // updating teh corresponding file with the current task
         }
-        private bool IsConflictingTime(TimeSpan ScheduledTime)
+        private bool IsConflictingTime(TimeSpan NewScheduledTime)
         {
             foreach(SingleTask EachTask in Tasks)
             {
-                if (EachTask.ScheduledTime == ScheduledTime)
+                if (EachTask.ScheduledTime == NewScheduledTime)
                     return true;
             }
             return false;
         }
-        public void deleteTask(int index)
+        public void DeleteTask(int Index)
         {
-            Tasks.RemoveAt(index-1);
+            Tasks.RemoveAt(Index - 1); //(index - 1) because indexing in list is 0 (zero) based
             ENV.UpdateTodayTaskFile(this);
         }
         public void Dispose()
