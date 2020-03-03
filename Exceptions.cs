@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace WindowsFormsApp1
+{
+    class ConflictingScheduledTimeException : Exception
+    {
+        public override string Message
+        {
+            get
+            {
+                return "You already have a Tast at this time";
+            }
+        }
+    }
+    class AddTaskWindowClosedException : Exception
+    {
+        public override string Message
+        {
+            get
+            {
+                return "oops form got closed unexpectedly!!";
+            }
+        }
+    }
+}
