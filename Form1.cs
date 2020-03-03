@@ -1,123 +1,124 @@
 ﻿using System;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace WindowsFormsApp1
 {
-    public partial class Form1 : Form
+    public partial class TaskForm : Form
     {
         private DateTime FormDate;
-        public Form1()
+        public TaskForm()
         {
             InitializeComponent();
             FormDate = DateTime.Now;
         }
+        private void TaskForm_Load(object sender, EventArgs e)
+        {
+            DisplayTaskInTextArea(DateTime.Now);
+        }
         private void TodaysScheduleButton_Click(object sender, EventArgs e)
         {
-            using (Task task = new Task(DateTime.Now))
-            {
-                dateTimePicker1.Value = task.Date;
-                FormDate = dateTimePicker1.Value;
-                displayTaskInTextArea(task.Date);
-            }
+            dateTimePicker.Value = DateTime.Now;
+            DisplayTaskInTextArea(FormDate);
         }
         private void YesterdaysScheduleButton_Click(object sender, EventArgs e)
         {
-            using (Task task = new Task(DateTime.Now.AddDays(-1)))
-            {
-                dateTimePicker1.Value = task.Date;
-                FormDate = dateTimePicker1.Value;
-                displayTaskInTextArea(task.Date);
-            }
-        }
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            displayTaskInTextArea(DateTime.Now);
+                dateTimePicker.Value = DateTime.Now.AddDays(-1);
+                DisplayTaskInTextArea(FormDate);
         }
         private void AddTaskButton_Click(object sender, EventArgs e)
-        {
-            if (FormDate.Date < DateTime.Now.Date)
+        { 
+            Form2 AddTaskEventHandler = new Form2(FormDate); // creating new form for taking input
+            AddTaskEventHandler.ShowDialog(); // this will display the form
+            try
             {
-                MessageBox.Show("Cannot add task to this date!!");
-            }
-            else
-            {
-                Form2 AddTaskEventHandler = new Form2(FormDate);
-                AddTaskEventHandler.ShowDialog();
-                if (AddTaskEventHandler.EnteredTask == null)
-                    return;
                 using (Task task = new Task(FormDate))
                 {
-                    if(!task.AddTask(AddTaskEventHandler.EnteredTask,AddTaskEventHandler.SelectedTime))
-                        MessageBox.Show("You already have a task at " + AddTaskEventHandler.SelectedTime);
+                    task.AddTask(AddTaskEventHandler.EnteredTask, AddTaskEventHandler.SelectedTime);
                 }
-                displayTaskInTextArea(FormDate);
+                DisplayTaskInTextArea(FormDate);
+            }
+            catch (ConflictingScheduledTimeException CSTE)
+            {
+                MessageBox.Show(CSTE.Message);
+            }
+            catch (AddTaskWindowClosedException ATWCE)
+            {
+                MessageBox.Show(ATWCE.Message);
             }
         }
-        private void displayTaskInTextArea(DateTime date)
+        private void DisplayTaskInTextArea(DateTime date)
         {
             TaskListArea.Clear();
             DateLabel.Text = date.ToShortDateString();
             DayLabel.Text = date.DayOfWeek.ToString();
-            if (ENV.IsTaskFileExist(date))
+            try
             {
                 using (Task task = new Task(date))
                 {
                     if (task.Tasks.Count() == 0)
                     {
-                        TaskListArea.AppendText("Hurray, You don't have any task!!");
+                        DisplayWhenNoTask();
                     }
                     int i = 0;
-                    foreach (SingleTask eachtask in task.Tasks)
+                    foreach (SingleTask EachTask in task.Tasks)
                     {
-                        TaskListArea.AppendText(++i + eachtask.TimeCreated.ToString().Substring(0, 8).PadLeft(9 + 15) + eachtask.Task.PadLeft(eachtask.Task.Length + 25) + "\n");
+                        TaskListArea.AppendText(
+                            ++i 
+                            + EachTask.TimeCreated.ToString().Substring(0, 8).PadLeft(9 + 15) 
+                            + EachTask.Task.PadLeft(EachTask.Task.Length + 25)
+                            + "\n"
+                            );
                     }
                 }
             }
-            else
+            catch(FileNotFoundException)
             {
-                TaskListArea.AppendText("Hurray, You don't have any task!!");
+               DisplayWhenNoTask();
             }
         }
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        private void DisplayWhenNoTask()
         {
-            FormDate = dateTimePicker1.Value;
-            displayTaskInTextArea(FormDate);
+                TaskListArea.AppendText("Hurray we don't habe any task!!!!");
         }
-
+        private void DateTimePicker_ValueChanged(object sender, EventArgs e)
+        {
+            FormDate = dateTimePicker.Value;
+            if (FormDate.Date < DateTime.Now.Date)
+                AddTaskButton.Enabled = false;
+            else
+                AddTaskButton.Enabled = true;
+            DisplayTaskInTextArea(FormDate);
+        }
         private void DeleteTaskButton_Click(object sender, EventArgs e)
         {
-            if (ENV.IsTaskFileExist(FormDate))
-            {
+            try
+            { 
                 using (Task task = new Task(FormDate))
                 {
-                    if(task.Tasks.Count > 0)
+                    DeleteForm DeleteTaskEvent = new DeleteForm();
+                    DeleteTaskEvent.ShowDialog();
+                    int index = DeleteTaskEvent.IndexofTask;
+                    if(index > 0 && index <= task.Tasks.Count)
                     {
-                        DeleteForm DeleteTaskEvent = new DeleteForm();
-                        DeleteTaskEvent.ShowDialog();
-                        int index = DeleteTaskEvent.IndexofTask;
-                        if(index > 0 && index <= task.Tasks.Count)
-                        {
-                            task.deleteTask(index);
-                            displayTaskInTextArea(FormDate);
-                        }
-                        else
-                        {
-                            MessageBox.Show("invalid index!! try again");
-                        }
+                        task.DeleteTask(index);
+                        DisplayTaskInTextArea(FormDate);
                     }
                     else
                     {
-                        MessageBox.Show("No Taks To delete!!");
+                        throw new IndexOutOfRangeException();
                     }
                 }
             }
-            else
+            catch(FileNotFoundException)
             {
                 MessageBox.Show("No Taks To delete!!");
             }
+            catch (IndexOutOfRangeException)
+            {
+                MessageBox.Show("Invalid index! try again");
+            }
         }
-        
     }
 }

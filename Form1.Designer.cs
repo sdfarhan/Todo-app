@@ -1,6 +1,6 @@
 ﻿namespace WindowsFormsApp1
 {
-    partial class Form1
+    partial class TaskForm
     {
         /// <summary>
         /// Required designer variable.
@@ -37,7 +37,7 @@
             this.SerialLabel = new System.Windows.Forms.Label();
             this.TimeLabel = new System.Windows.Forms.Label();
             this.TaskLabel = new System.Windows.Forms.Label();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.DeleteTaskButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -125,13 +125,13 @@
             this.TaskLabel.TabIndex = 11;
             this.TaskLabel.Text = "TASK";
             // 
-            // dateTimePicker1
+            // dateTimePicker
             // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(94, 13);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(200, 22);
-            this.dateTimePicker1.TabIndex = 13;
-            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
+            this.dateTimePicker.Location = new System.Drawing.Point(94, 13);
+            this.dateTimePicker.Name = "dateTimePicker";
+            this.dateTimePicker.Size = new System.Drawing.Size(200, 22);
+            this.dateTimePicker.TabIndex = 13;
+            this.dateTimePicker.ValueChanged += new System.EventHandler(this.DateTimePicker_ValueChanged);
             // 
             // DeleteTaskButton
             // 
@@ -143,13 +143,13 @@
             this.DeleteTaskButton.UseVisualStyleBackColor = true;
             this.DeleteTaskButton.Click += new System.EventHandler(this.DeleteTaskButton_Click);
             // 
-            // Form1
+            // TaskForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1010, 608);
             this.Controls.Add(this.DeleteTaskButton);
-            this.Controls.Add(this.dateTimePicker1);
+            this.Controls.Add(this.dateTimePicker);
             this.Controls.Add(this.TaskLabel);
             this.Controls.Add(this.TimeLabel);
             this.Controls.Add(this.SerialLabel);
@@ -159,9 +159,9 @@
             this.Controls.Add(this.YesterdaysScheduleButton);
             this.Controls.Add(this.DayLabel);
             this.Controls.Add(this.DateLabel);
-            this.Name = "Form1";
+            this.Name = "TaskForm";
             this.Text = "DISPLAY TODAYS SHCEDULE";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.TaskForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -178,7 +178,7 @@
         private System.Windows.Forms.Label SerialLabel;
         private System.Windows.Forms.Label TimeLabel;
         private System.Windows.Forms.Label TaskLabel;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.DateTimePicker dateTimePicker;
         private System.Windows.Forms.Button DeleteTaskButton;
     }
 }
