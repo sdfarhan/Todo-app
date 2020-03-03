@@ -15,7 +15,7 @@ namespace WindowsFormsApp1
         }
         private void TaskForm_Load(object sender, EventArgs e)
         {
-            DisplayTaskInTextArea(DateTime.Now);
+            DisplayTaskInTextArea(FormDate);
         }
         private void TodaysScheduleButton_Click(object sender, EventArgs e)
         {
@@ -33,7 +33,7 @@ namespace WindowsFormsApp1
             AddTaskEventHandler.ShowDialog(); // this will display the form
             try
             {
-                using (Task task = new Task(FormDate))
+                using (Task task = Task.GetRequiredTasksObject(FormDate))
                 {
                     task.AddTask(AddTaskEventHandler.EnteredTask, AddTaskEventHandler.SelectedTime);
                 }

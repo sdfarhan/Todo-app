@@ -12,7 +12,7 @@ namespace WindowsFormsApp1
         {
             get
             {
-                return "You already have a Tast at this time";
+                return "You already have a Task at this time";
             }
         }
     }

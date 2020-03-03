@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace WindowsFormsApp1
 {
@@ -14,29 +15,20 @@ namespace WindowsFormsApp1
         public Task(DateTime Date)
         {
             TaskDateTime = Date;
-            Tasks = new List<SingleTask>();
-            if (ENV.IsTaskFileExist(Date))
-            {
-                Tasks = ENV.GetTask(Date);
-            }
-            else
-            {
-                if(TaskDateTime.Date >= DateTime.Now.Date)
-                    ENV.CreateTodaysTaskFile(TaskDateTime);
-            }
+            Tasks = ENV.GetTasks(Date);
         }
         public void AddTask(string Task,TimeSpan ScheduledTime)
         {
-            if (IsConflictingTime(ScheduledTime))
-            {
-                throw new ConflictingScheduledTimeException();
-            }
             if(Task == null)
             {
                 throw new AddTaskWindowClosedException();
             }
+            if (IsConflictingTime(ScheduledTime))
+            {
+                throw new ConflictingScheduledTimeException();
+            }
             SingleTask CurrentSingleTask = new SingleTask(DateTime.Now.TimeOfDay, Task, ScheduledTime); //creating a new task
-            ENV.AddToTodayTaskFile(TaskDateTime,CurrentSingleTask); // updating teh corresponding file with the current task
+            ENV.AddToTaskFile(TaskDateTime,CurrentSingleTask); // updating teh corresponding file with the current task
         }
         private bool IsConflictingTime(TimeSpan NewScheduledTime)
         {
@@ -47,10 +39,19 @@ namespace WindowsFormsApp1
             }
             return false;
         }
+        public static Task GetRequiredTasksObject(DateTime Date)
+        {
+            if (ENV.IsTaskFileExist(Date))
+            {
+                return new Task(Date);
+            }
+            ENV.CreateTaskFile(Date);
+            return new Task(Date);
+        }
         public void DeleteTask(int Index)
         {
             Tasks.RemoveAt(Index - 1); //(index - 1) because indexing in list is 0 (zero) based
-            ENV.UpdateTodayTaskFile(this);
+            ENV.UpdateTaskFile(this);
         }
         public void Dispose()
         {
