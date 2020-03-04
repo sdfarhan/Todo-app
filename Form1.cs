@@ -43,9 +43,9 @@ namespace WindowsFormsApp1
             {
                 MessageBox.Show(CSTE.Message);
             }
-            catch (AddTaskWindowClosedException ATWCE)
+            catch (NullReferenceException ATWCE)
             {
-                MessageBox.Show(ATWCE.Message);
+                
             }
         }
         private void DisplayTaskInTextArea(DateTime date)
@@ -99,25 +99,19 @@ namespace WindowsFormsApp1
                 {
                     DeleteForm DeleteTaskEvent = new DeleteForm();
                     DeleteTaskEvent.ShowDialog();
-                    int index = DeleteTaskEvent.IndexofTask;
-                    if(index > 0 && index <= task.Tasks.Count)
-                    {
-                        task.DeleteTask(index);
-                        DisplayTaskInTextArea(FormDate);
-                    }
-                    else
-                    {
-                        throw new IndexOutOfRangeException();
-                    }
+                    int index = int.Parse(DeleteTaskEvent.IndexofTask);
+                    task.DeleteTask(index);
+                    DisplayTaskInTextArea(FormDate);
                 }
+                    
             }
             catch(FileNotFoundException)
             {
                 MessageBox.Show("No Taks To delete!!");
             }
-            catch (IndexOutOfRangeException)
+            catch (ArgumentNullException)
             {
-                MessageBox.Show("Invalid index! try again");
+
             }
         }
     }

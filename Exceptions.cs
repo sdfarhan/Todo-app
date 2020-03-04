@@ -16,7 +16,7 @@ namespace WindowsFormsApp1
             }
         }
     }
-    class AddTaskWindowClosedException : Exception
+    class WindowClosedException : Exception
     {
         public override string Message
         {

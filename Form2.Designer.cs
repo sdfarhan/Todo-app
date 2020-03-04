@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace WindowsFormsApp1
 {
@@ -165,9 +166,19 @@ namespace WindowsFormsApp1
             this.Controls.Add(this.TaskInputBox);
             this.Name = "Form2";
             this.Text = "Form2";
+            this.FormClosing += Form2_FormClosing;
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        private void Form2_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(EnteredTask == null)
+            {
+                this.Dispose();
+                MessageBox.Show("oops input form got closed unexpectedly!!");
+            }
         }
 
         #endregion

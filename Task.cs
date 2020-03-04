@@ -15,20 +15,26 @@ namespace WindowsFormsApp1
         public Task(DateTime Date)
         {
             TaskDateTime = Date;
-            Tasks = ENV.GetTasks(Date);
+            using (BackEnd FileHandler = new BackEnd(Date))
+            {
+                Tasks = FileHandler.GetTasks();
+            }
         }
         public void AddTask(string Task,TimeSpan ScheduledTime)
         {
             if(Task == null)
             {
-                throw new AddTaskWindowClosedException();
+                throw new NullReferenceException();
             }
             if (IsConflictingTime(ScheduledTime))
             {
                 throw new ConflictingScheduledTimeException();
             }
             SingleTask CurrentSingleTask = new SingleTask(DateTime.Now.TimeOfDay, Task, ScheduledTime); //creating a new task
-            ENV.AddToTaskFile(TaskDateTime,CurrentSingleTask); // updating teh corresponding file with the current task
+            using (BackEnd FileHandler = new BackEnd(taskDateTime))
+            {
+                FileHandler.AddToTaskFile(CurrentSingleTask); // updating teh corresponding file with the current task
+            }
         }
         private bool IsConflictingTime(TimeSpan NewScheduledTime)
         {
@@ -41,17 +47,30 @@ namespace WindowsFormsApp1
         }
         public static Task GetRequiredTasksObject(DateTime Date)
         {
-            if (ENV.IsTaskFileExist(Date))
+            using (BackEnd FileHandler = new BackEnd(Date))
             {
+                if (FileHandler.IsTaskFileExist())
+                {
+                    return new Task(Date);
+                }
+                FileHandler.CreateTaskFile();
                 return new Task(Date);
             }
-            ENV.CreateTaskFile(Date);
-            return new Task(Date);
         }
         public void DeleteTask(int Index)
         {
-            Tasks.RemoveAt(Index - 1); //(index - 1) because indexing in list is 0 (zero) based
-            ENV.UpdateTaskFile(this);
+            try
+            {
+                Tasks.RemoveAt(Index - 1);
+                using (BackEnd FileHandler = new BackEnd(taskDateTime))
+                {
+                    FileHandler.UpdateTaskFile(this); //(index - 1) because indexing in list is 0 (zero) based
+                }
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                throw new IndexOutOfRangeException();
+            }
         }
         public void Dispose()
         {

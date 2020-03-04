@@ -19,7 +19,6 @@
             }
             base.Dispose(disposing);
         }
-
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -168,7 +167,6 @@
         }
 
         #endregion
-
         private System.Windows.Forms.Label DateLabel;
         private System.Windows.Forms.Label DayLabel;
         private System.Windows.Forms.Button YesterdaysScheduleButton;

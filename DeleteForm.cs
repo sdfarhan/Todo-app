@@ -12,19 +12,22 @@ namespace WindowsFormsApp1
 {
     public partial class DeleteForm : Form
     {
-        public int IndexofTask;
+        public string IndexofTask;
         public DeleteForm()
         {
             InitializeComponent();
         }
-
         private void DeleteButton_Click(object sender, EventArgs e)
         {
-            if (IndexField.Text.Length != 0)
+            IndexofTask = IndexField.Text;
+            if (IndexofTask.Length == 0)
             {
-                IndexofTask = Int32.Parse(IndexField.Text);
+                WarningLabel.Text = "Please Enter some Task!!";
             }
-            this.Dispose();
+            else
+            {
+                this.Dispose();
+            }
         }
     }
 }
