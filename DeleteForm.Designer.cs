@@ -92,7 +92,6 @@ namespace WindowsFormsApp1
             if(IndexField == null)
             {
                 this.Dispose();
-                MessageBox.Show("oops input form got closed unexpectedly!!");
             }
         }
         #endregion

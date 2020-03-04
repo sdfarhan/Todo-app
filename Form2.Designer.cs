@@ -177,7 +177,6 @@ namespace WindowsFormsApp1
             if(EnteredTask == null)
             {
                 this.Dispose();
-                MessageBox.Show("oops input form got closed unexpectedly!!");
             }
         }
 

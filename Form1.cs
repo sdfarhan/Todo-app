@@ -109,7 +109,7 @@ namespace WindowsFormsApp1
             {
                 MessageBox.Show("No Taks To delete!!");
             }
-            catch (ArgumentNullException)
+            catch (Exception)
             {
 
             }
