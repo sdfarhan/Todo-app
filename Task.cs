@@ -17,14 +17,21 @@ namespace WindowsFormsApp1
             TaskDateTime = Date;
             using (BackEnd FileHandler = new BackEnd(Date))
             {
-                Tasks = FileHandler.GetTasks();
+                try
+                {
+                    Tasks = FileHandler.GetTasks();
+                }
+                catch (FileNotFoundException)
+                {
+                    Tasks = null;
+                }
             }
         }
         public void AddTask(string Task,TimeSpan ScheduledTime)
         {
-            if(Task == null)
+            if(Task == null || Task.Length == 0)
             {
-                throw new NullReferenceException();
+                throw new WindowClosedException();
             }
             if (IsConflictingTime(ScheduledTime))
             {
@@ -34,6 +41,21 @@ namespace WindowsFormsApp1
             using (BackEnd FileHandler = new BackEnd(taskDateTime))
             {
                 FileHandler.AddToTaskFile(CurrentSingleTask); // updating teh corresponding file with the current task
+            }
+        }
+        public void DeleteTask(int Index)
+        {
+            try
+            {
+                Tasks.RemoveAt(Index - 1);
+                using (BackEnd FileHandler = new BackEnd(taskDateTime))
+                {
+                    FileHandler.UpdateTaskFile(this); //(index - 1) because indexing in list is 0 (zero) based
+                }
+            }
+            catch (Exception)
+            {
+                throw new IncorrectInputException(Tasks.Count.ToString());
             }
         }
         private bool IsConflictingTime(TimeSpan NewScheduledTime)
@@ -55,21 +77,6 @@ namespace WindowsFormsApp1
                 }
                 FileHandler.CreateTaskFile();
                 return new Task(Date);
-            }
-        }
-        public void DeleteTask(int Index)
-        {
-            try
-            {
-                Tasks.RemoveAt(Index - 1);
-                using (BackEnd FileHandler = new BackEnd(taskDateTime))
-                {
-                    FileHandler.UpdateTaskFile(this); //(index - 1) because indexing in list is 0 (zero) based
-                }
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                throw new IndexOutOfRangeException(Tasks.Count.ToString());
             }
         }
         public void Dispose()

@@ -9,7 +9,6 @@ namespace WindowsFormsApp1
         private string TaskFilePath = @"C:\Users\SF185122\databases\todo-app\tasks\";
         private string TaskFileExt = "-task.txt";
         private DateTime Date;
-        private string Path;
         public BackEnd(DateTime Date)
         {
             this.Date = Date;

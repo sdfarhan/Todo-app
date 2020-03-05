@@ -21,12 +21,10 @@ namespace WindowsFormsApp1
         private void TodaysScheduleButton_Click(object sender, EventArgs e)
         {
             dateTimePicker.Value = DateTime.Now;
-            DisplayTaskInTextArea(FormDate);
         }
         private void YesterdaysScheduleButton_Click(object sender, EventArgs e)
         {
                 dateTimePicker.Value = DateTime.Now.AddDays(-1);
-                DisplayTaskInTextArea(FormDate);
         }
         private void AddTaskButton_Click(object sender, EventArgs e)
         { 
@@ -44,43 +42,9 @@ namespace WindowsFormsApp1
             {
                 MessageBox.Show(CSTE.Message);
             }
-            catch (NullReferenceException)
+            catch (WindowClosedException)
             {
-                
-            }
-        }
-        private void DisplayTaskInTextArea(DateTime date)
-        {
-            TaskListArea.Clear();
-            DateLabel.Text = date.ToShortDateString();
-            DayLabel.Text = date.DayOfWeek.ToString();
-            try
-            {
-                using (Task task = new Task(date))
-                {
-                    if (task.Tasks.Count() == 0)
-                    {
-                        DisplayWhenNoTask();
-                    }
-                    else
-                    {
-                        DeleteTaskButton.Enabled = true;
-                        int i = 0;
-                        foreach (SingleTask EachTask in task.Tasks)
-                        {
-                            TaskListArea.AppendText(
-                                ++i 
-                                + EachTask.TimeCreated.ToString().Substring(0, 8).PadLeft(9 + 15) 
-                                + EachTask.Task.PadLeft(EachTask.Task.Length + 25)
-                                + "\n"
-                                );
-                        }
-                    }
-                }
-            }
-            catch(FileNotFoundException)
-            {
-               DisplayWhenNoTask();
+
             }
         }
         private void DeleteTaskButton_Click(object sender, EventArgs e)
@@ -91,19 +55,42 @@ namespace WindowsFormsApp1
                 {
                     DeleteForm DeleteTaskEvent = new DeleteForm();
                     DeleteTaskEvent.ShowDialog();
-                    int index = int.Parse(DeleteTaskEvent.IndexofTask);
+                    int index = DeleteTaskEvent.IndexofTask;
                     task.DeleteTask(index);
                     DisplayTaskInTextArea(FormDate);
                 }   
             }
-            catch(FileNotFoundException)
+            catch (IncorrectInputException IIE)
             {
-                MessageBox.Show("No Taks To delete!!");
+                MessageBox.Show("Index can be in range [" + 1 + "-" + IIE.Message + "]");
             }
-            catch (Exception E)
+        }
+        private void DisplayTaskInTextArea(DateTime date)
+        {
+            TaskListArea.Clear();
+            DateLabel.Text = date.ToShortDateString();
+            DayLabel.Text = date.DayOfWeek.ToString();
+            using (Task task = new Task(date))
             {
-                MessageBox.Show("Index can be in range ["+1+"-"+E.Message+"]");
+                if (task.Tasks != null)
+                {
+                    int i = 0;
+                    foreach (SingleTask EachTask in task.Tasks)
+                    {
+                        TaskListArea.AppendText(
+                            ++i 
+                            + EachTask.TimeCreated.ToString().Substring(0, 8).PadLeft(9 + 15) 
+                            + EachTask.Task.PadLeft(EachTask.Task.Length + 25)
+                            + "\n"
+                            );
+                    }
+                }
+                else
+                {
+                    DisplayWhenNoTask();
+                }
             }
+            
         }
         private void DisplayWhenNoTask()
         {

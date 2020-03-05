@@ -22,7 +22,22 @@ namespace WindowsFormsApp1
         {
             get
             {
-                return "oops form got closed unexpectedly!!";
+                return "oops form got closed!!";
+            }
+        }
+    }
+    public class IncorrectInputException : Exception
+    {
+        string ErrMessage;
+        public IncorrectInputException(String Message) 
+        {
+            ErrMessage = Message;
+        }
+        public override string Message
+        {
+            get
+            {
+                return ErrMessage;
             }
         }
     }
