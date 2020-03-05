@@ -69,7 +69,7 @@ namespace WindowsFormsApp1
             }
             catch (ArgumentOutOfRangeException)
             {
-                throw new IndexOutOfRangeException();
+                throw new IndexOutOfRangeException(Tasks.Count.ToString());
             }
         }
         public void Dispose()

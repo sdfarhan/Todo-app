@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -43,7 +44,7 @@ namespace WindowsFormsApp1
             {
                 MessageBox.Show(CSTE.Message);
             }
-            catch (NullReferenceException ATWCE)
+            catch (NullReferenceException)
             {
                 
             }
@@ -61,15 +62,19 @@ namespace WindowsFormsApp1
                     {
                         DisplayWhenNoTask();
                     }
-                    int i = 0;
-                    foreach (SingleTask EachTask in task.Tasks)
+                    else
                     {
-                        TaskListArea.AppendText(
-                            ++i 
-                            + EachTask.TimeCreated.ToString().Substring(0, 8).PadLeft(9 + 15) 
-                            + EachTask.Task.PadLeft(EachTask.Task.Length + 25)
-                            + "\n"
-                            );
+                        DeleteTaskButton.Enabled = true;
+                        int i = 0;
+                        foreach (SingleTask EachTask in task.Tasks)
+                        {
+                            TaskListArea.AppendText(
+                                ++i 
+                                + EachTask.TimeCreated.ToString().Substring(0, 8).PadLeft(9 + 15) 
+                                + EachTask.Task.PadLeft(EachTask.Task.Length + 25)
+                                + "\n"
+                                );
+                        }
                     }
                 }
             }
@@ -77,19 +82,6 @@ namespace WindowsFormsApp1
             {
                DisplayWhenNoTask();
             }
-        }
-        private void DisplayWhenNoTask()
-        {
-                TaskListArea.AppendText("Hurray we don't habe any task!!!!");
-        }
-        private void DateTimePicker_ValueChanged(object sender, EventArgs e)
-        {
-            FormDate = dateTimePicker.Value;
-            if (FormDate.Date < DateTime.Now.Date)
-                AddTaskButton.Enabled = false;
-            else
-                AddTaskButton.Enabled = true;
-            DisplayTaskInTextArea(FormDate);
         }
         private void DeleteTaskButton_Click(object sender, EventArgs e)
         {
@@ -102,17 +94,37 @@ namespace WindowsFormsApp1
                     int index = int.Parse(DeleteTaskEvent.IndexofTask);
                     task.DeleteTask(index);
                     DisplayTaskInTextArea(FormDate);
-                }
-                    
+                }   
             }
             catch(FileNotFoundException)
             {
                 MessageBox.Show("No Taks To delete!!");
             }
-            catch (Exception)
+            catch (Exception E)
             {
-
+                MessageBox.Show("Index can be in range ["+1+"-"+E.Message+"]");
             }
+        }
+        private void DisplayWhenNoTask()
+        {
+            DeleteTaskButton.Enabled = false;
+            TaskListArea.AppendText("Hurray we don't habe any task!!!!");
+        }
+        private void DateTimePicker_ValueChanged(object sender, EventArgs e)
+        {
+            FormDate = dateTimePicker.Value;
+            if (FormDate.Date < DateTime.Now.Date)
+            {
+                AddTaskButton.Enabled = false;
+                DeleteTaskButton.Enabled = false;
+                Debug.WriteLine(DeleteTaskButton.Enabled);
+            }
+            else
+            {
+                AddTaskButton.Enabled = true;
+                DeleteTaskButton.Enabled = true;
+            }
+            DisplayTaskInTextArea(FormDate);
         }
     }
 }

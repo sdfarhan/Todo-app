@@ -169,7 +169,6 @@ namespace WindowsFormsApp1
             this.FormClosing += Form2_FormClosing;
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
