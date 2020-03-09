@@ -23,7 +23,7 @@ namespace WindowsFormsApp1
                 }
                 catch (FileNotFoundException)
                 {
-                    Tasks = null;
+                    Tasks = new List<SingleTask>();
                 }
             }
         }

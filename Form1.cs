@@ -36,7 +36,7 @@ namespace WindowsFormsApp1
                 {
                     task.AddTask(AddTaskEventHandler.EnteredTask, AddTaskEventHandler.SelectedTime);
                 }
-                DisplayTaskInTextArea(FormDate);
+                dateTimePicker.Value = FormDate.AddMilliseconds(1);
             }
             catch (ConflictingScheduledTimeException CSTE)
             {
@@ -72,7 +72,7 @@ namespace WindowsFormsApp1
             DayLabel.Text = date.DayOfWeek.ToString();
             using (Task task = new Task(date))
             {
-                if (task.Tasks != null)
+                if (task.Tasks.Count != 0)
                 {
                     int i = 0;
                     foreach (SingleTask EachTask in task.Tasks)
@@ -90,7 +90,6 @@ namespace WindowsFormsApp1
                     DisplayWhenNoTask();
                 }
             }
-            
         }
         private void DisplayWhenNoTask()
         {
@@ -104,7 +103,6 @@ namespace WindowsFormsApp1
             {
                 AddTaskButton.Enabled = false;
                 DeleteTaskButton.Enabled = false;
-                Debug.WriteLine(DeleteTaskButton.Enabled);
             }
             else
             {
