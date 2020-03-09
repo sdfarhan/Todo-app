@@ -83,17 +83,24 @@ namespace WindowsFormsApp1
         {
             DateTime Date = CurrenTask.TaskDateTime;
             string Path = GetPathAndThrowExeptionIfRequired();
-            CreateTaskFile();
-            using (StreamWriter SW = new StreamWriter(Path, true))
+            if(CurrenTask.Tasks.Count != 0)
             {
-                foreach(SingleTask EachTask in CurrenTask.Tasks)
+                CreateTaskFile();
+                using (StreamWriter SW = new StreamWriter(Path, true))
                 {
-                    SW.WriteLine(
-                        EachTask.TimeCreated.ToString() 
-                        +" "
-                        + EachTask.Task.PadLeft(15)
-                        );
+                    foreach(SingleTask EachTask in CurrenTask.Tasks)
+                    {
+                        SW.WriteLine(
+                            EachTask.TimeCreated.ToString() 
+                            +" "
+                            + EachTask.Task.PadLeft(15)
+                            );
+                    }
                 }
+            }
+            else
+            {
+                File.Delete(GetTaskFilePath());
             }
         }
         public void Dispose()

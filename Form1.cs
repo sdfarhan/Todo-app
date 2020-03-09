@@ -57,7 +57,7 @@ namespace WindowsFormsApp1
                     DeleteTaskEvent.ShowDialog();
                     int index = DeleteTaskEvent.IndexofTask;
                     task.DeleteTask(index);
-                    DisplayTaskInTextArea(FormDate);
+                    dateTimePicker.Value = FormDate.AddMilliseconds(1);
                 }   
             }
             catch (IncorrectInputException IIE)
