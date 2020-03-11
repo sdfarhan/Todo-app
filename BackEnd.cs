@@ -100,7 +100,7 @@ namespace WindowsFormsApp1
             }
             else
             {
-                File.Delete(GetTaskFilePath());
+                File.Delete(Path);
             }
         }
         public void Dispose()

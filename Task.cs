@@ -9,7 +9,7 @@ namespace WindowsFormsApp1
         private DateTime taskDateTime;
         private List<SingleTask> tasks;
 
-        internal List<SingleTask> Tasks { get => tasks; set => tasks = value; }
+        public List<SingleTask> Tasks;
         public DateTime TaskDateTime { get => taskDateTime; set => taskDateTime = value; }
 
         public Task(DateTime Date)
