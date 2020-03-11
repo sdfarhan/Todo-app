@@ -6,11 +6,9 @@ namespace WindowsFormsApp1
 {
     class Task : IDisposable
     {
-        private DateTime taskDateTime;
-        private List<SingleTask> tasks;
-
+        
         public List<SingleTask> Tasks;
-        public DateTime TaskDateTime { get => taskDateTime; set => taskDateTime = value; }
+        public DateTime TaskDateTime; 
 
         public Task(DateTime Date)
         {
@@ -39,7 +37,7 @@ namespace WindowsFormsApp1
                 throw new ConflictingScheduledTimeException();
             }
             SingleTask CurrentSingleTask = new SingleTask(DateTime.Now.TimeOfDay, Task, ScheduledTime); //creating a new task
-            using (BackEnd FileHandler = new BackEnd(taskDateTime))
+            using (BackEnd FileHandler = new BackEnd(TaskDateTime))
             {
                 FileHandler.AddToTaskFile(CurrentSingleTask); // updating teh corresponding file with the current task
             }
@@ -49,7 +47,7 @@ namespace WindowsFormsApp1
             try
             {
                 Tasks.RemoveAt(Index - 1);
-                using (BackEnd FileHandler = new BackEnd(taskDateTime))
+                using (BackEnd FileHandler = new BackEnd(TaskDateTime))
                 {
                     FileHandler.UpdateTaskFile(this); //(index - 1) because indexing in list is 0 (zero) based
                 }
