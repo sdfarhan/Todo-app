@@ -13,6 +13,7 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
             FormDate = DateTime.Now;
+            MySql test = new MySql();
         }
         private void TaskForm_Load(object sender, EventArgs e)
         {

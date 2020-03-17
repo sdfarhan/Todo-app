@@ -6,8 +6,8 @@ namespace WindowsFormsApp1
 {
     class BackEnd : IDisposable
     {
-        private string TaskFilePath = @"C:\Users\SF185122\databases\todo-app\tasks\";
-        private string TaskFileExt = "-task.txt";
+        private readonly string TaskFilePath = @"C:\Users\SF185122\databases\todo-app\tasks\";
+        private readonly string TaskFileExt = "-task.txt";
         private DateTime Date;
         public BackEnd(DateTime Date)
         {
