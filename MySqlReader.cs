@@ -9,7 +9,7 @@ namespace WindowsFormsApp1
     {
         public List<SingleTask> Select(DateTime Date)
         {
-            string query = $"SELECT * FROM tasks where DATE = ${Date.Date}";
+            string query = $"SELECT * FROM tasks where DATE = '{Date.Date.ToString(@"yyyy-MM-dd")}';";
             List<SingleTask> Data = new List<SingleTask>();
             if (this.OpenConnection() == true)
             {

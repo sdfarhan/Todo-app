@@ -32,7 +32,7 @@ namespace WindowsFormsApp1
             AddTaskEventHandler.ShowDialog(); // this will display the form
             try
             {
-                using (Task task = Task.GetRequiredTasksObject(FormDate))
+                using (SQLInterface task = new SQLInterface(FormDate))
                 {
                     task.AddTask(AddTaskEventHandler.EnteredTask, AddTaskEventHandler.SelectedTime);
                 }
@@ -51,7 +51,7 @@ namespace WindowsFormsApp1
         {
             try
             { 
-                using (Task task = new Task(FormDate))
+                using (SQLInterface task = new SQLInterface(FormDate))
                 {
                     DeleteForm DeleteTaskEvent = new DeleteForm();
                     DeleteTaskEvent.ShowDialog();
@@ -70,7 +70,7 @@ namespace WindowsFormsApp1
             TaskListArea.Clear();
             DateLabel.Text = date.ToShortDateString();
             DayLabel.Text = date.DayOfWeek.ToString();
-            using (Task task = new Task(date))
+            using (SQLInterface task = new SQLInterface(FormDate))
             {
                 if (task.Tasks.Count != 0)
                 {
@@ -81,6 +81,8 @@ namespace WindowsFormsApp1
                             ++i 
                             + EachTask.TimeCreated.ToString().Substring(0, 8).PadLeft(9 + 15) 
                             + EachTask.Task.PadLeft(EachTask.Task.Length + 25)
+                            + " AT "
+                            + EachTask.TimeScheduled
                             + "\n"
                             );
                     }
@@ -99,6 +101,7 @@ namespace WindowsFormsApp1
         private void DateTimePicker_ValueChanged(object sender, EventArgs e)
         {
             FormDate = dateTimePicker.Value;
+            DateChange.DateChangeOccur = FormDate;
             if (FormDate.Date < DateTime.Now.Date)
             {
                 AddTaskButton.Enabled = false;

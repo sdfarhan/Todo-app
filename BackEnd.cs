@@ -46,7 +46,7 @@ namespace WindowsFormsApp1
             string Path = GetPathAndThrowExeptionIfRequired();
             using (StreamWriter SW = new StreamWriter(Path,true))
             {
-                SW.WriteLine(CurrentSingleTask.TimeCreated +" "+ CurrentSingleTask.Task+" AT "+CurrentSingleTask.ScheduledTime);
+                SW.WriteLine(CurrentSingleTask.TimeCreated +" "+ CurrentSingleTask.Task+" AT "+CurrentSingleTask.TimeScheduled);
             }
         }
         public List<SingleTask> GetTasks()

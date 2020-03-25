@@ -9,7 +9,7 @@ namespace WindowsFormsApp1
     {
         public void Insert(SingleTask Task,DateTime Date)
         {
-            string query = $"INSERT INTO tasks (TimeCreated, Date, Task, TimeScheduled) VALUES('{Task.TimeCreated.ToString(@"hh\:mm\:ss")}','{Date.Date.ToString(@"yyyy-MM-dd")}','{Task.Task}','{Task.TimeCreated.ToString(@"hh\:mm\:ss")}')";
+            string query = $"INSERT INTO tasks (TimeCreated, Date, Task, TimeScheduled) VALUES('{Task.TimeCreated.ToString(@"hh\:mm\:ss")}','{Date.Date.ToString(@"yyyy-MM-dd")}','{Task.Task}','{Task.TimeScheduled.ToString(@"hh\:mm\:ss")}')";
             if (OpenConnection() == true)
             {
                 MySqlCommand cmd = new MySqlCommand(query, Connection);
@@ -19,7 +19,7 @@ namespace WindowsFormsApp1
         }
         public void Delete(SingleTask Task)
         {
-            string query = $"DELETE FROM tasks WHERE TimeCreated='${Task.TimeCreated}'";
+            string query = $"DELETE FROM tasks WHERE TimeCreated='{Task.TimeCreated.ToString(@"hh\:mm\:ss")}';";
             if (OpenConnection() == true)
             {
                 MySqlCommand cmd = new MySqlCommand(query, Connection);

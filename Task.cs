@@ -61,7 +61,7 @@ namespace WindowsFormsApp1
         {
             foreach(SingleTask EachTask in Tasks)
             {
-                if (EachTask.ScheduledTime == NewScheduledTime)
+                if (EachTask.TimeScheduled == NewScheduledTime)
                     return true;
             }
             return false;
