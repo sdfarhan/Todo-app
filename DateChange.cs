@@ -8,6 +8,6 @@ namespace WindowsFormsApp1
 {
     class DateChange
     {
-        public static DateTime DateChangeOccur; 
+        public static DateTime DateChangeOccur = DateTime.Now; 
     }
 }
